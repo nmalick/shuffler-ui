@@ -1,46 +1,137 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Welcome from './Welcome';
+import React from "react";
+import "./App.css";
+import Welcome from "./Welcome";
+import SpotifyLogin from "./SpotifyLogin";
+import shufflerLogo from "./images/shufflerNew - circle-cropped.png";
 
-import { authEndpoint, clientId, redirectUri, scopes } from "./config";
+import {
+  authEndpoint,
+  clientId,
+  redirectUri,
+  scopes,
+  tokenEndpoint,
+  grantType,
+  clientSecret,
+  herokuEndpoint,
+  userEndpoint,
+  playlistEndpoint
+} from "./config";
 import * as $ from "jquery";
 import hash from "./hash";
 
-
 class App extends React.Component {
-  constructor(){
+  constructor() {
     super();
     this.state = {
-      token: null
+      token: null,
+      tokenType: null,
+      expiresIn: null,
+      userName: null,
+      listOfPlaylists: null,
+      numOfPlaylists: null
+      // code: null,
+      // error: null,
+      // _state: null,
+      // scope: null,
+      // refreshToken: null,
+      // spotifyLoginPage: null
     };
+    this.getUserData = this.getUserData.bind(this);
+    this.getUserPlaylists = this.getUserPlaylists.bind(this);
   }
-  componentDidMount(){
+  componentDidMount() {
     let _token = hash.access_token;
+    let _tokenType = hash.token_type;
+    let _expires_in = hash.expires_in;
+    console.log("hash", hash);
 
     if (_token) {
       this.setState({
-        token: _token
+        token: _token,
+        tokenType: _tokenType,
+        expiresIn: _expires_in
       });
     }
   }
 
-  componentWillUnmount() {
+  componentDidUpdate() {
+    if (!this.state.userName) {
+      this.getUserData(this.state.token);
+    }
+
+    if (!this.state.numOfPlaylists) {
+      this.getUserPlaylists(this.state.token);
+    }
   }
 
-  render(){
+  componentWillUnmount() {}
+
+  getUserData(token) {
+    $.ajax({
+      url: `${userEndpoint}`,
+      type: "GET",
+      beforeSend: xhr => {
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+      },
+      success: data => {
+        console.log("data", data);
+        this.setState({
+          userName: data.display_name
+        });
+      }
+    });
+  }
+
+  getUserPlaylists(token) {
+    $.ajax({
+      url: `${playlistEndpoint}`,
+      type: "GET",
+      beforeSend: xhr => {
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+      },
+      success: data => {
+        console.log("data", data);
+        this.setState({
+          listOfPlaylists: data.items,
+          numOfPlaylists: data.total
+        });
+      }
+    });
+  }
+
+  render() {
     return (
-        <div className="App">
-          {!this.state.token && (
-            <a href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join("%20")}&response_type=token&show_dialog=true`}>
-              Login to spotify
+      <div className="App">
+        {!this.state.token && (
+          <div className="container ">
+            <p></p>
+            <p></p>
+            <img className="lead" src={shufflerLogo} />
+            <p></p>
+            <p></p>
+            <h1 className="display-4 headerText">Welcome to the Shuffler</h1>
+            <p></p>
+            <p></p>
+            <a
+              className="btn btn-success btn-lg login-button"
+              href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
+                "%20"
+              )}&response_type=token&show_dialog=true`}
+            >
+              Login to Spotify
             </a>
-          )}
-          {this.state.token && (
-            <Welcome name="Test"/>
-          )}
-        </div>
-    )
+          </div>
+        )}
+        {this.state.token && (
+          <Welcome
+            token={this.state.token}
+            userName={this.state.userName}
+            numOfPlaylists={this.state.numOfPlaylists}
+            listOfPlaylists={this.state.listOfPlaylists}
+          />
+        )}
+      </div>
+    );
   }
 }
 
