@@ -1,7 +1,6 @@
 import React from "react";
 import "./App.css";
 import Welcome from "./Welcome";
-import SpotifyLogin from "./SpotifyLogin";
 import shufflerLogo from "./images/shufflerNew - circle-cropped.png";
 
 import {
