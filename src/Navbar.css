@@ -1,0 +1,12 @@
+.navbar {
+  border-color: #008081;
+}
+
+.searchBlock {
+  justify-content: flex-end;
+}
+
+.searchButton {
+  color: #008081 !important;
+  border-color: #008081 !important;
+}

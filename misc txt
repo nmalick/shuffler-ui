@@ -1,0 +1,87 @@
+// {!this.state.token && (
+          //   <button className="btn btn-success"  onClick={this.loginRequest}>
+          //     Login to spotify
+          //   </button>
+          // )}
+          // {this.state.token && (
+          //   <Welcome name="Test"/>
+          // )}
+		  
+		  
+//   code: data.code,
+        //   _state: data.state,
+		
+		
+		          href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join("%20")}&response_type=token&show_dialog=true`}
+
+
+  loginRequest() {
+    $.ajax({
+      url:
+        `${herokuEndpoint}` +
+        `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
+          "%20"
+        )}&response_type=code`,
+      type: "GET",
+      dataType: "html",
+      beforeSend: xhr => {
+        xhr.setRequestHeader("Authorization", "Bearer ");
+      },
+      success: data => {
+        console.log("data", data);
+        this.setState({
+          code: data.code,
+          _state: data.state
+        });
+      },
+      error: function(errorData) {
+        this.setState({
+          error: errorData.error,
+          _state: errorData.state
+        });
+      }
+    });
+    this.requestToken(this.state.code);
+  }
+
+  requestToken(code) {
+    $.ajax({
+      url:
+        `${herokuEndpoint}` +
+        `${tokenEndpoint}?grant_type=${grantType}&code=${code}&redirect_uri=${redirectUri}&client_id =${clientId}&client_secret=${clientSecret}`,
+      type: "POST",
+      async: false,
+      beforeSend: xhr => {
+        xhr.setRequestHeader("Authorization", "Bearer ");
+      },
+      success: data => {
+        console.log("data", data);
+        this.setState({
+          token: data.access_token,
+          tokenType: data.token_type,
+          scope: data.scope,
+          expiresIn: data.expires_in,
+          refreshToken: data.refresh_token
+        });
+      }
+    });
+  }
+  
+  
+  
+              <div className="row">
+              <div className="col-md-4">
+                <div className="card">
+                  <img src="shufflerLogo" className="card-img-top" />
+                  <div className="card-body">
+                    <h5 className="card-title">Playlist Title</h5>
+                    <p className="card-text">
+                      This data can be loaded from spotify
+                    </p>
+                    <a href="#" className="btn btn-dark btn-lg">
+                      Time to Shuffle
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
