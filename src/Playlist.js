@@ -48,7 +48,7 @@ class Playlist extends React.Component {
               <td scope="row">
                 {track.track.preview_url && (
                   <a
-                    className="btn btn-lg btn-dark previewButton"
+                    className="btn btn-dark previewButton"
                     href={track.track.preview_url}
                     target="_blank"
                   >
@@ -71,21 +71,29 @@ class Playlist extends React.Component {
         <Navbar />
         <div className="jumbotron jumbotron-fluid bg-light">
           <div className="container">
+            <img
+              src={this.props.selectedPlaylistImg}
+              class="img-thumbnail rounded"
+              width="300vem"
+              height="500vem"
+            />
+            <p></p>
             <a className="btn btn-lg btn-dark shuffleButton" href="">
               Analyze Playlist
             </a>
             <p></p>
-            <p></p>
-            <table class="table">
-              <thead class="tableHeader">
-                <tr>
-                  <th scope="col">Songs in: {this.state.playlistName}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <ul>{this.state.tracks}</ul>
-              </tbody>
-            </table>
+            <div class="table-responsive">
+              <table class="table">
+                <thead class="tableHeader">
+                  <tr>
+                    <th scope="col">Songs in: {this.state.playlistName}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ul>{this.state.tracks}</ul>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
