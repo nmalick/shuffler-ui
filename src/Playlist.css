@@ -1,0 +1,22 @@
+.table {
+  background-color: lightgray;
+  color: #008081 !important;
+}
+
+.tableHeader {
+  background-color: #008081 !important;
+  color: lightgray;
+}
+
+.shuffleButton {
+  background-color: #008081 !important;
+  color: lightgray !important;
+}
+
+.container {
+  text-align: center;
+}
+
+.previewButton {
+  color: #008081 !important;
+}

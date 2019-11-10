@@ -1,16 +1,24 @@
 import React from "react";
 import "./Welcome.css";
 import Navbar from "./Navbar";
+import Playlist from "./Playlist";
 
 class Welcome extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      playlists: null
+      token: null,
+      playlists: null,
+      selectedPlaylistId: null
     };
+    this.selectPlaylist = this.selectPlaylist.bind(this);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    if (this.props.token) {
+      this.setState({ token: this.props.token });
+    }
+  }
 
   componentDidUpdate() {
     if (this.props.numOfPlaylists) {
@@ -18,18 +26,23 @@ class Welcome extends React.Component {
       console.log("listOfPlaylists", this.props.listOfPlaylists);
       if (!this.state.playlists) {
         this.setState({
-          playlists: this.props.listOfPlaylists.map(playlist => (<div className="card mb-3 text-center">
-            <img src={playlist.images[0].url} className="card-img-top"/>
-            <div className="card-body">
-              <h5 className="card-title">{playlist.name}</h5>
-              <p className="card-text">
-                <small>Playlist By: {playlist.owner.display_name}</small>
-              </p>
-              <a href="#" className="btn btn-dark btn-lg shuffleButton">
-                Time to Shuffle
-              </a>
+          playlists: this.props.listOfPlaylists.map(playlist => (
+            <div className="card mb-3 text-center">
+              <img src={playlist.images[0].url} className="card-img-top" />
+              <div className="card-body">
+                <h5 className="card-title">{playlist.name}</h5>
+                <p className="card-text">
+                  <small>Playlist By: {playlist.owner.display_name}</small>
+                </p>
+                <a
+                  className="btn btn-dark btn-lg selectButton text-white"
+                  onClick={() => this.selectPlaylist(playlist.id)}
+                >
+                  Select Playlist
+                </a>
+              </div>
             </div>
-          </div>))
+          ))
         });
       }
     }
@@ -37,23 +50,37 @@ class Welcome extends React.Component {
 
   componentWillUnmount() {}
 
+  selectPlaylist(plId) {
+    this.setState({ selectedPlaylistId: plId });
+    console.log("plId", plId);
+  }
+
   render() {
-    return (<div className="Welcome">
-      <Navbar/>
-      <p></p>
-      {/* JUMBOTRON. */}
-      <div className="jumbotron jumbotron-fluid ">
-        <div className="container">
-          <h1 className="display-4">Welcome {this.props.userName}</h1>
-          <p className="lead">Select a Playlist to start shuffling.</p>
-          <hr class="my-4"/>
-          <div class="card-columns">
-            <ul className="playlistCards">{this.state.playlists}</ul>
+    if (!this.state.selectedPlaylistId) {
+      return (
+        <div className="Welcome">
+          <Navbar />
+          <div className="jumbotron jumbotron-fluid bg-light">
+            <div className="container">
+              <h1 className="display-4">Welcome {this.props.userName}</h1>
+              <p className="lead">Select a Playlist to start shuffling.</p>
+              <hr class="my-4" />
+              <div class="card-columns">
+                <ul className="playlistCards">{this.state.playlists}</ul>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      {/* JUMBOTRON. */}
-    </div>);
+      );
+    }
+    if (this.state.selectedPlaylistId) {
+      return (
+        <Playlist
+          selectedPlaylistId={this.state.selectedPlaylistId}
+          token={this.state.token}
+        />
+      );
+    }
   }
 }
 

@@ -2,7 +2,8 @@ import React from "react";
 import "./App.css";
 import Welcome from "./Welcome";
 import shufflerLogo from "./images/shufflerNew - circle-cropped.png";
-
+import * as $ from "jquery";
+import hash from "./hash";
 import {
   authEndpoint,
   clientId,
@@ -15,8 +16,6 @@ import {
   userEndpoint,
   playlistEndpoint
 } from "./config";
-import * as $ from "jquery";
-import hash from "./hash";
 
 class App extends React.Component {
   constructor() {
@@ -99,9 +98,9 @@ class App extends React.Component {
   }
 
   render() {
-    return (
-      <div className="App">
-        {!this.state.token && (
+    if (!this.state.token) {
+      return (
+        <div className="App">
           <div className="container ">
             <p></p>
             <p></p>
@@ -120,17 +119,19 @@ class App extends React.Component {
               Login to Spotify
             </a>
           </div>
-        )}
-        {this.state.token && (
-          <Welcome
-            token={this.state.token}
-            userName={this.state.userName}
-            numOfPlaylists={this.state.numOfPlaylists}
-            listOfPlaylists={this.state.listOfPlaylists}
-          />
-        )}
-      </div>
-    );
+        </div>
+      );
+    }
+    if (this.state.token) {
+      return (
+        <Welcome
+          token={this.state.token}
+          userName={this.state.userName}
+          numOfPlaylists={this.state.numOfPlaylists}
+          listOfPlaylists={this.state.listOfPlaylists}
+        />
+      );
+    }
   }
 }
 
