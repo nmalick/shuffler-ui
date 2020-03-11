@@ -3,6 +3,7 @@ import "./Playlist.css";
 import Navbar from "./Navbar";
 import * as $ from "jquery";
 import { playlistDataEndpoint } from "./config";
+import axios from 'axios';
 
 class Playlist extends React.Component {
   constructor(props) {
@@ -65,6 +66,17 @@ class Playlist extends React.Component {
     });
   }
 
+  startAnalysis(){
+    const newSong = {
+      shufflerDB_songName: "Song #2",
+      shufflerDB_artistName: "Artist B",
+      shufflerDB_songGenre: "Genre X",
+      shufflerDB_songAnalyzed: false
+    };
+    axios.post('http://localhost:4000/shuffler/add', newSong)
+    .then(res => console.log(res.data));
+  }
+
   render() {
     return (
       <div className="Playlist">
@@ -78,9 +90,11 @@ class Playlist extends React.Component {
               height="500vem"
             />
             <p></p>
-            <a className="btn btn-lg btn-dark shuffleButton" href="">
+            <button className="btn btn-lg btn-dark shuffleButton" 
+            onClick={this.startAnalysis}
+            >
               Analyze Playlist
-            </a>
+            </button>
             <p></p>
             <div class="table-responsive">
               <table class="table">
