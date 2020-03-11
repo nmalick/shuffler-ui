@@ -9,7 +9,8 @@ class Welcome extends React.Component {
     this.state = {
       token: null,
       playlists: null,
-      selectedPlaylistId: null
+      selectedPlaylistId: null,
+      selectedPlaylistImg: null
     };
     this.selectPlaylist = this.selectPlaylist.bind(this);
   }
@@ -36,7 +37,9 @@ class Welcome extends React.Component {
                 </p>
                 <a
                   className="btn btn-dark btn-lg selectButton text-white"
-                  onClick={() => this.selectPlaylist(playlist.id)}
+                  onClick={() =>
+                    this.selectPlaylist(playlist.id, playlist.images[0].url)
+                  }
                 >
                   Select Playlist
                 </a>
@@ -50,8 +53,8 @@ class Welcome extends React.Component {
 
   componentWillUnmount() {}
 
-  selectPlaylist(plId) {
-    this.setState({ selectedPlaylistId: plId });
+  selectPlaylist(plId, plImg) {
+    this.setState({ selectedPlaylistId: plId, selectedPlaylistImg: plImg });
     console.log("plId", plId);
   }
 
@@ -63,7 +66,7 @@ class Welcome extends React.Component {
           <div className="jumbotron jumbotron-fluid bg-light">
             <div className="container">
               <h1 className="display-4">Welcome {this.props.userName}</h1>
-              <p className="lead">Select a Playlist to start shuffling.</p>
+              <p className="lead">Select a playlist to start shuffling.</p>
               <hr class="my-4" />
               <div class="card-columns">
                 <ul className="playlistCards">{this.state.playlists}</ul>
@@ -76,8 +79,9 @@ class Welcome extends React.Component {
     if (this.state.selectedPlaylistId) {
       return (
         <Playlist
-          selectedPlaylistId={this.state.selectedPlaylistId}
           token={this.state.token}
+          selectedPlaylistId={this.state.selectedPlaylistId}
+          selectedPlaylistImg={this.state.selectedPlaylistImg}
         />
       );
     }
