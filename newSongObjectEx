@@ -1,0 +1,58 @@
+const newSong = {
+      shufflerDB_songName: "test",
+      shufflerDB_artists: {
+        href: "test",
+        id: "test",
+        name: "test"
+      },
+      shufflerDB_bars:{
+        start: "test",
+        duration: "test",
+        confidence: "test"
+      },
+      shufflerDB_beats: {
+      start: "test",
+      duration: "test",
+      confidence: "test"
+    },
+	  shufflerDB_sections: {
+      start: "test",
+      duration: "test",
+      confidence: "test",
+      loudness: "test",
+      tempo: "test",
+      tempo_confidence: "test",
+      key: "test",
+      key_confidence: "test",
+      mode: "test",
+      mode_confidence: "test",
+      time_signature: "test",
+      time_signature_confidence: "test"
+    },
+	  shufflerDB_segments: {
+      start: "test",
+      duration: "test",
+      confidence: "test",
+      loudness_start: "test",
+      loudness_max_time: "test",
+      loudness_max: "test",
+      loudness_end: "test",
+      pitches: "test",
+      timbre: "test"
+    },
+	  shufflerDB_songPopularity: "test",
+	  shufflerDB_duration: "test",
+	  shufflerDB_key: "test",
+  	shufflerDB_mode: "test",
+	  shufflerDB_acousticness: "test",
+	  shufflerDB_danceability: "test",
+  	shufflerDB_energy: "test",
+	  shufflerDB_loudness: "test",
+	  shufflerDB_valence: "test",
+  	shufflerDB_tempo: "test",
+  	shufflerDB_genres: {
+            genre1: "test",
+            genre2: "test"
+    },
+	  shufflerDB_artistPopularity: "test"
+    };

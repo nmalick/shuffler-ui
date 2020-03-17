@@ -13,9 +13,11 @@ class Playlist extends React.Component {
       selectedPlaylistId: null,
       playlistName: null,
       tracks: null,
+      listOfTracks: null,
       tracksReceived: null
     };
     this.getTracks = this.getTracks.bind(this);
+    this.startAnalysis = this.startAnalysis.bind(this);
   }
 
   componentDidMount() {
@@ -44,6 +46,7 @@ class Playlist extends React.Component {
         this.setState({
           playlistName: data.name,
           tracksReceived: true,
+          listOfTracks: data.tracks.items,
           tracks: data.tracks.items.map(track => (
             <tr>
               <td scope="row">
@@ -67,14 +70,163 @@ class Playlist extends React.Component {
   }
 
   startAnalysis(){
-    const newSong = {
-      shufflerDB_songName: "Song #2",
-      shufflerDB_artistName: "Artist B",
-      shufflerDB_songGenre: "Genre X",
-      shufflerDB_songAnalyzed: false
-    };
-    axios.post('http://localhost:4000/shuffler/add', newSong)
+    if (this.state.token && this.state.tracksReceived){
+      let song1 = this.state.listOfTracks[0];
+      let song2 = this.state.listOfTracks[1];
+      const playlistToAdd = {
+        "newPlaylist": {
+          "playlistName":"Playlist Name",
+          "songsInPlaylist": [
+            {
+                "songName": song1.track.name,
+                "artists": [
+                  {
+                      "href": "test",
+                      "id": "test",
+                      "name": "ARTIST #1"
+                  }
+              ],
+                "bars": {
+                    "start": 36,
+                    "duration": 36,
+                    "confidence": 36.9
+                },
+                "beats": {
+                    "start": 36,
+                    "duration": 36,
+                    "confidence": 36
+                },
+                "sections": {
+                    "start": 36,
+                    "duration": 36,
+                    "confidence": 36,
+                    "loudness": 36,
+                    "tempo": 36,
+                    "tempo_confidence": 36,
+                    "key": 36,
+                    "key_confidence": 36,
+                    "mode": 36,
+                    "mode_confidence": 36,
+                    "time_signature": 36,
+                    "time_signature_confidence": 36
+                },
+                "segments": {
+                    "start": 36,
+                    "duration": 36,
+                    "confidence": 36,
+                    "loudness_start": 36,
+                    "loudness_max_time": 36,
+                    "loudness_max": 36,
+                    "loudness_end": 36,
+                    "pitches": [
+                        36,
+                        36,
+                        36
+                    ],
+                    "timbre": [
+                        36,
+                        36,
+                        36,
+                        36
+                    ]
+                },
+                "songPopularity": 36.9,
+                "duration": 36,
+                "key": 36,
+                "mode": 36,
+                "acousticness": 36,
+                "danceability": 36,
+                "energy": 36,
+                "loudness": 36,
+                "valence": 36,
+                "tempo": 36,
+                "genres": [
+                    "test1",
+                    "test2"
+                ],
+                "artistPopularity": 36
+            },
+            {
+                "songName": song2.track.name,
+                "artists": [
+                  {
+                      "href": "test",
+                      "id": "test",
+                      "name": "ARTIST #2"
+                  },
+                  {
+                      "href": "test",
+                      "id": "test",
+                      "name": "ARTIST #2 FEAT"
+                  }
+              ],
+                "bars": {
+                    "start": 36,
+                    "duration": 36,
+                    "confidence": 36.9
+                },
+                "beats": {
+                    "start": 36,
+                    "duration": 36,
+                    "confidence": 36
+                },
+                "sections": {
+                    "start": 36,
+                    "duration": 36,
+                    "confidence": 36,
+                    "loudness": 36,
+                    "tempo": 36,
+                    "tempo_confidence": 36,
+                    "key": 36,
+                    "key_confidence": 36,
+                    "mode": 36,
+                    "mode_confidence": 36,
+                    "time_signature": 36,
+                    "time_signature_confidence": 36
+                },
+                "segments": {
+                    "start": 36,
+                    "duration": 36,
+                    "confidence": 36,
+                    "loudness_start": 36,
+                    "loudness_max_time": 36,
+                    "loudness_max": 36,
+                    "loudness_end": 36,
+                    "pitches": [
+                        36,
+                        36,
+                        36
+                    ],
+                    "timbre": [
+                        36,
+                        36,
+                        36,
+                        36
+                    ]
+                },
+                "songPopularity": 36.9,
+                "duration": 36,
+                "key": 36,
+                "mode": 36,
+                "acousticness": 36,
+                "danceability": 36,
+                "energy": 36,
+                "loudness": 36,
+                "valence": 36,
+                "tempo": 36,
+                "genres": [
+                    "test1",
+                    "test2"
+                ],
+                "artistPopularity": 36
+            }
+        ]
+        }
+      };
+
+    axios.post('http://localhost:4000/shuffler/add', playlistToAdd)
     .then(res => console.log(res.data));
+    }
   }
 
   render() {
