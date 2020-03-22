@@ -3,6 +3,8 @@ import "./Playlist.css";
 import Navbar from "./Navbar";
 import * as $ from "jquery";
 import { playlistDataEndpoint } from "./config";
+import { trackAudioAnalysisEndpoint } from "./config";
+import { trackAudioFeaturesEndpoint } from "./config";
 import axios from 'axios';
 
 class Playlist extends React.Component {
@@ -14,11 +16,17 @@ class Playlist extends React.Component {
       playlistName: null,
       tracks: null,
       listOfTracks: null,
-      tracksReceived: null
+      tracksReceived: null,
+      trackAudioAnalysis: null,
+      trackAudioFeatures: null
     };
     this.getTracks = this.getTracks.bind(this);
     this.startAnalysis = this.startAnalysis.bind(this);
+    this.getTrackAudioAnalysis = this.getTrackAudioAnalysis.bind(this);
+    this.getTrackAudioFeatures = this.getTrackAudioFeatures.bind(this);
+    this.addSongToDb = this.addSongToDb.bind(this);
   }
+
 
   componentDidMount() {
     if (this.props.token) {
@@ -32,7 +40,18 @@ class Playlist extends React.Component {
     }
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() { }
+
+  addSongToDb(songToAdd){
+    
+    const newSong = {
+      "songToAdd": songToAdd
+    };
+    
+    console.log("newSong", newSong);
+    axios.post('http://localhost:4000/shuffler/add', newSong )
+      .then(res => console.log(res.data));
+  }
 
   getTracks(token, playlistId) {
     $.ajax({
@@ -69,163 +88,78 @@ class Playlist extends React.Component {
     });
   }
 
-  startAnalysis(){
-    if (this.state.token && this.state.tracksReceived){
-      let song1 = this.state.listOfTracks[0];
-      let song2 = this.state.listOfTracks[1];
-      const playlistToAdd = {
-        "newPlaylist": {
-          "playlistName":"Playlist Name",
-          "songsInPlaylist": [
-            {
-                "songName": song1.track.name,
-                "artists": [
-                  {
-                      "href": "test",
-                      "id": "test",
-                      "name": "ARTIST #1"
-                  }
-              ],
-                "bars": {
-                    "start": 36,
-                    "duration": 36,
-                    "confidence": 36.9
-                },
-                "beats": {
-                    "start": 36,
-                    "duration": 36,
-                    "confidence": 36
-                },
-                "sections": {
-                    "start": 36,
-                    "duration": 36,
-                    "confidence": 36,
-                    "loudness": 36,
-                    "tempo": 36,
-                    "tempo_confidence": 36,
-                    "key": 36,
-                    "key_confidence": 36,
-                    "mode": 36,
-                    "mode_confidence": 36,
-                    "time_signature": 36,
-                    "time_signature_confidence": 36
-                },
-                "segments": {
-                    "start": 36,
-                    "duration": 36,
-                    "confidence": 36,
-                    "loudness_start": 36,
-                    "loudness_max_time": 36,
-                    "loudness_max": 36,
-                    "loudness_end": 36,
-                    "pitches": [
-                        36,
-                        36,
-                        36
-                    ],
-                    "timbre": [
-                        36,
-                        36,
-                        36,
-                        36
-                    ]
-                },
-                "songPopularity": 36.9,
-                "duration": 36,
-                "key": 36,
-                "mode": 36,
-                "acousticness": 36,
-                "danceability": 36,
-                "energy": 36,
-                "loudness": 36,
-                "valence": 36,
-                "tempo": 36,
-                "genres": [
-                    "test1",
-                    "test2"
-                ],
-                "artistPopularity": 36
-            },
-            {
-                "songName": song2.track.name,
-                "artists": [
-                  {
-                      "href": "test",
-                      "id": "test",
-                      "name": "ARTIST #2"
-                  },
-                  {
-                      "href": "test",
-                      "id": "test",
-                      "name": "ARTIST #2 FEAT"
-                  }
-              ],
-                "bars": {
-                    "start": 36,
-                    "duration": 36,
-                    "confidence": 36.9
-                },
-                "beats": {
-                    "start": 36,
-                    "duration": 36,
-                    "confidence": 36
-                },
-                "sections": {
-                    "start": 36,
-                    "duration": 36,
-                    "confidence": 36,
-                    "loudness": 36,
-                    "tempo": 36,
-                    "tempo_confidence": 36,
-                    "key": 36,
-                    "key_confidence": 36,
-                    "mode": 36,
-                    "mode_confidence": 36,
-                    "time_signature": 36,
-                    "time_signature_confidence": 36
-                },
-                "segments": {
-                    "start": 36,
-                    "duration": 36,
-                    "confidence": 36,
-                    "loudness_start": 36,
-                    "loudness_max_time": 36,
-                    "loudness_max": 36,
-                    "loudness_end": 36,
-                    "pitches": [
-                        36,
-                        36,
-                        36
-                    ],
-                    "timbre": [
-                        36,
-                        36,
-                        36,
-                        36
-                    ]
-                },
-                "songPopularity": 36.9,
-                "duration": 36,
-                "key": 36,
-                "mode": 36,
-                "acousticness": 36,
-                "danceability": 36,
-                "energy": 36,
-                "loudness": 36,
-                "valence": 36,
-                "tempo": 36,
-                "genres": [
-                    "test1",
-                    "test2"
-                ],
-                "artistPopularity": 36
-            }
-        ]
-        }
-      };
+  getTrackAudioAnalysis(token, trackID) {
+    return $.ajax({
+      url: `${trackAudioAnalysisEndpoint}` + trackID,
+      type: "GET",
+      beforeSend: xhr => {
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+      },
+      success: data => {
+        console.log("trackAudioAnalysis", data);
+        this.setState({
+          trackAudioAnalysis: data
+        });
+      }
+    });
+  }
 
-    axios.post('http://localhost:4000/shuffler/add', playlistToAdd)
-    .then(res => console.log(res.data));
+  getTrackAudioFeatures(token, trackID) {
+    return $.ajax({
+      url: `${trackAudioFeaturesEndpoint}` + trackID,
+      type: "GET",
+      beforeSend: xhr => {
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+      },
+      success: data => {
+        console.log("trackAudioFeatures", data);
+        this.setState({
+          trackAudioFeatures: data
+        });
+      }
+    });
+  }
+
+  async startAnalysis() {
+    if (this.state.token && this.state.tracksReceived && this.state.listOfTracks) {
+      var listOfTracks = this.state.listOfTracks;
+      var songToAdd;
+      for (var i = 0; i <listOfTracks.length ; i++) {
+
+        var trackAudioAnalysis = await this.getTrackAudioAnalysis(this.state.token, listOfTracks[i].track.id)
+        var trackAudioFeatures =  await this.getTrackAudioFeatures(this.state.token, listOfTracks[i].track.id)
+
+        if (trackAudioAnalysis && trackAudioFeatures) {
+          
+          var songToAdd = {
+            newSong: listOfTracks[i].track.name,
+            trackID: listOfTracks[i].track.id,
+            playlists: {
+              playlistName: this.state.playlistName,
+              playlistId: this.props.selectedPlaylistId
+            },
+            artists: listOfTracks[i].track.artists,
+            songPopularity: listOfTracks[i].track.popularity,
+
+            bars: trackAudioAnalysis.bars,
+            beats: trackAudioAnalysis.beats,
+            sections: trackAudioAnalysis.sections,
+            segments: trackAudioAnalysis.segments,
+
+            duration: trackAudioFeatures.duration_ms,
+            key: trackAudioFeatures.key,
+            mode: trackAudioFeatures.mode,
+            acousticness: trackAudioFeatures.acousticness,
+            danceability: trackAudioFeatures.danceability,
+            energy: trackAudioFeatures.energy,
+            loudness: trackAudioFeatures.loudness,
+            valence: trackAudioFeatures.valence,
+            tempo: trackAudioFeatures.tempo
+          };
+        }
+
+        this.addSongToDb(songToAdd);
+      }
     }
   }
 
@@ -242,8 +176,8 @@ class Playlist extends React.Component {
               height="500vem"
             />
             <p></p>
-            <button className="btn btn-lg btn-dark shuffleButton" 
-            onClick={this.startAnalysis}
+            <button className="btn btn-lg btn-dark shuffleButton"
+              onClick={this.startAnalysis}
             >
               Analyze Playlist
             </button>
