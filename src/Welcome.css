@@ -1,0 +1,20 @@
+.playlistCards {
+  display: block;
+}
+
+.container {
+  color: #008081;
+}
+
+.card {
+  color: black !important;
+  background-color: #008081 !important;
+}
+
+.selectButton {
+  color: #008081 !important;
+}
+
+.Welcome {
+  text-align: center;
+}
