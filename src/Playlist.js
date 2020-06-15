@@ -47,10 +47,12 @@ class Playlist extends React.Component {
           var songToAdd = {
             newSong: listOfTracks[i].track.name,
             trackID: listOfTracks[i].track.id,
-            playlists: {
-              playlistName: this.state.playlistName,
-              playlistId: this.props.selectedPlaylistId
-            },
+            playlists: Object.values({
+              playlistObject: {
+                playlistName: this.state.playlistName,
+                playlistId: this.props.selectedPlaylistId
+              }          
+            }),
             artists: await this.getArtistNames(listOfTracks[i].track.artists),
             songPopularity: listOfTracks[i].track.popularity,
 
@@ -70,7 +72,7 @@ class Playlist extends React.Component {
             tempo: trackAudioFeatures.tempo
           };
 
-          // this.addSongToDb(songToAdd);
+          this.addSongToDb(songToAdd);
       }
 
     }
@@ -180,26 +182,43 @@ class Playlist extends React.Component {
   }
 
   //DB functions
-  addSongToDb(songToAdd){
+  async addSongToDb(songToAdd){
     const newSong = {
       "songToAdd": songToAdd
     };
     console.log("newSong", newSong);
 
-    // var songInDb;
-    // axios.get('http://localhost:4000/shuffler/'+songToAdd.trackID).then(res => {
-    //   songInDb = Object.values(res.data);
-    //   console.log("songInDb", songInDb);
-    // });
+    var songInDb;
+    await axios.get('http://localhost:4000/shuffler/findbyTrackId/'+songToAdd.trackID).then(res => {
+      songInDb = Object.values(res.data);
+      console.log("songInDb", songInDb);
+    });
 
-    // if(songInDb == null){
-      axios.post('http://localhost:4000/shuffler/add', newSong )
+    if(songInDb.length == 0){
+      console.log("Adding new song");
+      await axios.post('http://localhost:4000/shuffler/add', newSong )
       .then(res => console.log(res.data));
-    // }
+    }else{
+      var playlistObjects = songInDb[0].songToAdd.playlists;
+      var newPlaylistId = newSong.songToAdd.playlists[0].playlistId;
+      console.log("playlistObjects", playlistObjects);
+      console.log("newPlaylistId", newPlaylistId);
 
-    // if(songInDb && !songInDb.playlists.includes(songToAdd.playlistId)){
-    //     axios.post('localhost:4000/shuffler/update/'+songInDb.trackID);
-    // }
+      for (var i=0; i<playlistObjects.length;i++){
+        if(playlistObjects[i].playlistId == newPlaylistId){
+          console.log(" playlistID found");
+            break;
+        }
+        else if(playlistObjects[i].playlistId != newPlaylistId && i == playlistObjects.length-1){
+          console.log("last playlist ID reached");
+          await axios.post('http://localhost:4000/shuffler/updatePlaylistsByTrackId/'+songToAdd.trackID , newSong.songToAdd.playlists[0])
+          .then(res => console.log(res.data));
+        }
+      }
+  
+    }
+
+    
   }
 
 
@@ -255,7 +274,7 @@ class Playlist extends React.Component {
 
     var clustering = require('density-clustering');
     var kmeans = new clustering.KMEANS();
-    var newClusters = kmeans.run(dataArray, 3);
+    var newClusters = kmeans.run(dataArray, Math.round(Math.sqrt(this.state.songsFromDB.length)));
     console.log("newClusters", newClusters);
 
     var newSongClusters = new Array();
