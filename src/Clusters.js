@@ -12,9 +12,12 @@ class Clusters extends React.Component{
         this.state = {
           token: null,
           songClusters: null,
-          playlistName: null
+          playlistName: null,
+          clusterColors: null,
+          clusterBorder: null
         };
         this.getTrackData = this.getTrackData.bind(this);
+        this.getPosition = this.getPosition.bind(this);
       }
 
 
@@ -27,6 +30,8 @@ async componentDidMount() {
       });
       
       var newSongClusters = new Array();
+      var newSongColors = new Array();
+      var newClusterBorders = new Array();
       for(var i=0; i<this.props.songClusters.length; i++){
         var songRow = new Array();
         for(var j=0; j<this.props.songClusters[i].length; j++ ){
@@ -34,11 +39,20 @@ async componentDidMount() {
           songRow.push(newTrackData.name);
         }
         newSongClusters.push(songRow);
+
+        var randomColor = "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16+i);});
+        newSongColors.push(randomColor);
+
+        var newBorderPos = this.props.songClusters[i].length/10;
+        newClusterBorders.push(newBorderPos);
       }
       this.setState({
-        songClusters: newSongClusters
+        songClusters: newSongClusters,
+        clusterColors: newSongColors,
+        clusterBorder: newClusterBorders
       });
       console.log("newSongClusters", this.state.songClusters);
+      console.log("newSongBorders", this.state.clusterBorder);
     }
   }
 
@@ -61,18 +75,31 @@ async componentDidMount() {
   }
   
 
+  getPosition(posI){
+    var offSet = 0;
+    for(var i=0; i< posI; i++){
+      offSet += this.state.clusterBorder[i];
+    }
+    return [{
+      x: Math.random() * (this.state.clusterBorder[posI] - 0) + offSet,
+      y:Math.random() * (this.state.clusterBorder[posI]  - 0) + 0,
+      r:20
+    }]
+  }
+
+
 render(){ 
 
   var  myData;
-  if(this.state.songClusters){
+  if(this.state.songClusters && this.state.clusterColors){
     var dataPoints = new Array();
     for(var i=0; i< this.state.songClusters.length;i++){
       for(var j=0; j<this.state.songClusters[i].length;j++){
         var dataPoint = {
           label: this.state.songClusters[i][j],
-          backgroundColor:'#943126',
+          backgroundColor: this.state.clusterColors[i],
           pointStyle:'circle',
-          data: [{x:10,y:20,r:20}]
+          data: this.getPosition(i)
         }
         dataPoints.push(dataPoint);
       }
