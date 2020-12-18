@@ -194,6 +194,7 @@ class Playlist extends React.Component {
       console.log("songInDb", songInDb);
     });
 
+    if(songInDb){
     if(songInDb.length == 0){
       console.log("Adding new song");
       await axios.post('http://localhost:4000/shuffler/add', newSong )
@@ -217,8 +218,7 @@ class Playlist extends React.Component {
       }
   
     }
-
-    
+  }
   }
 
 
@@ -228,9 +228,6 @@ class Playlist extends React.Component {
     
     this.setState({songsFromDB : Object.values(res.data)});
     });
-    
-    console.log("sfd", this.state.songsFromDB);
-
     
     var dataArray = new Array();
     for(var i=0; i<this.state.songsFromDB.length;i++){
@@ -270,37 +267,26 @@ class Playlist extends React.Component {
       }
       dataArray[i] =dataItem;
     }
-    console.log(dataArray);
 
     var clustering = require('density-clustering');
     var kmeans = new clustering.KMEANS();
     var newClusters = kmeans.run(dataArray, Math.round(Math.sqrt(this.state.songsFromDB.length)));
-    console.log("newClusters", newClusters);
 
     var newSongClusters = new Array();
     for(var k=0; k<newClusters.length;k++){
       var newClusterElement = new Array();
       for(var l=0; l<newClusters[k].length;l++){
         var index = newClusters[k][l];
-        newClusterElement[l] = this.state.songsFromDB[index]._id;
+        newClusterElement[l] = this.state.songsFromDB[index].songToAdd.trackID;
       }
       newSongClusters[k] = newClusterElement;
     }
     
-    console.log("newSongClusters", newSongClusters);
     
     this.setState({
       songClusters: newSongClusters
     });
     
-    //Clustering works but I don't get the array index so I can't differentiate values. Adding a name or number messes it up
-    // var clusterMaker = require('clusters');
-    // clusterMaker.k(3);
-    // clusterMaker.iterations(100);
-    // clusterMaker.data(dataArray);    
-    // console.log("clusters", clusterMaker.clusters());
-
-
   }
 
 
@@ -350,11 +336,11 @@ class Playlist extends React.Component {
           token={this.state.token}
           userName={this.state.userName}
           songClusters={this.state.songClusters}
+          playlistName={this.state.playlistName}
         />
       )
     }
 
-    
   }
 }
 

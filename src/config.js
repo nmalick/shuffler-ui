@@ -10,6 +10,7 @@ export const playlistEndpoint = "https://api.spotify.com/v1/me/playlists";
 export const playlistDataEndpoint = "https://api.spotify.com/v1/playlists/";
 export const trackAudioAnalysisEndpoint = "https://api.spotify.com/v1/audio-analysis/";
 export const trackAudioFeaturesEndpoint = "https://api.spotify.com/v1/audio-features/";
+export const trackDataEndpoint = "https://api.spotify.com/v1/tracks/";
 export const scopes = [
   "user-top-read",
   "user-read-currently-playing",
