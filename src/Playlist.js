@@ -191,7 +191,9 @@ class Playlist extends React.Component {
     var songInDb;
     await axios.get('http://localhost:4000/shuffler/findbyTrackId/'+songToAdd.trackID).then(res => {
       songInDb = Object.values(res.data);
-      console.log("songInDb", songInDb);
+      // Figure out why res.data changes randomly for 1 sec. Sometimes I get res.status instead
+      // console.log("songInDBValue", res.data);
+      // console.log("songInDb", songInDb);
     });
 
     if(songInDb){
@@ -224,7 +226,7 @@ class Playlist extends React.Component {
 
 //Data Analysis functions
   async runClusterAlg(){
-    await axios.get('http://localhost:4000/shuffler').then(res => {
+    await axios.get('http://localhost:4000/shuffler/findbyPlaylistId/'+this.props.selectedPlaylistId).then(res => {
     
     this.setState({songsFromDB : Object.values(res.data)});
     });

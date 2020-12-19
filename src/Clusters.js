@@ -34,7 +34,7 @@ async componentDidMount() {
       var newClusterBorders = new Array();
       for(var i=0; i<this.props.songClusters.length; i++){
         var songRow = new Array();
-        for(var j=0; j<this.props.songClusters[i].length; j++ ){
+        for(var j=0; j<this.props.songClusters[i].length; j++){
           var newTrackData = await this.getTrackData(this.props.token, this.props.songClusters[i][j]);
           songRow.push(newTrackData.name);
         }
