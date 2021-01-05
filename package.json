@@ -7,7 +7,7 @@
     "@tensorflow-models/mobilenet": "^2.0.4",
     "@tensorflow/tfjs": "^1.7.4",
     "@tensorflow/tfjs-node": "^1.7.4",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.9.3",
     "clusters": "0.0.4",
