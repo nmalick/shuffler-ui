@@ -1,68 +1,59 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<a name="intro"></a>
+## Introduction/Project Purpose
 
-## Available Scripts
+The [React](https://react.dev/) library, is one of the easiest paths to developing web, 
+mobile web, native mobile and native desktop applications. It provides a simple application that 
+interfaces with a set of REST MVC endpoints.  This project will use Material UI and reactive JavaScript.
 
-In the project directory, you can run:
+## About The Shuffler
+The Shuffler is a re-imagined smart shuffle functionality for music players. It groups songs in a given playlist into subsets based on track metadata (i.e: genre, beat, or tempo) as well additional factors (i.e: artist or language). This will allow to identify connections between tracks in order to maintain the "vibe".  Read more about [The Shuffler](https://pensieveproject.com/shuffler)
 
-### `npm start`
+### Spotify API Client ID and Client Secret
+* Go to [Spotify](https://developer.spotify.com/dashboard/applications) and log in with your Spotify account.  Create one if necessary.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+* Click on ‘Create an app’ and fill in the ‘App name’ and ‘App description’ of your choice. Mark the checkboxes and create the app.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+* Under 'Basic Information' tab You will see your ‘Client Id’ and you can click on ‘Show client secret’ to unhide your ’Client secret’.
+![alt text](image.png)
 
-### `npm test`
+* Click on ‘Edit Settings’ and provide the details such as ‘Website’, ‘Redirect URIs’, and ‘Brand Image’.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* Add Client ID and Client Secret in `config.js`
+```shell
+export const clientId = "<CLIENT_ID>";
+export const clientSecret = "<CLIENT_SECRET>";
+```
 
-### `npm run build`
+### NodeJs Installation & Configuration
+  * Install [node.js](https://nodejs.org/en/download/) and npm
+    * Verify installation `node --version` and `npm --version`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Navigate to project folder. `cd shuffler-ui`
+- Install dependencies. `npm install`
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### To start application locally
+```shell
+ npm start
+```
 
-### `npm run eject`
+### Home page
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```shell
+  http://localhost:3000/shuffler
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Note
+  Application starts at port 3000 as default
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  To change the port number which application use set the env variable in terminal,Before starting the application 
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+  For windows
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+  ```
+    set PORT= port_number eg:4000
+  ```
+  For Linux/Mac
+  ```
+    export PORT= port_number eg:4000
+  ```
